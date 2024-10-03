@@ -33,7 +33,7 @@ class Ejercicio1APP
 
       public function potencias()
       {
-        include("views/potencias.php");
+        include("views/potencias2.php");
         
       }
 
