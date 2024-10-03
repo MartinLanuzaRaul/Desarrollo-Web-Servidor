@@ -32,14 +32,16 @@ class App
 
   public function index()
   {
-    echo "Estamos en el index<br>";
+    include("views/index.php");
+    /*echo "Estamos en el index<br>";
     echo "Estos es $this->name<br>";
     echo "Me llamo $this->student<br>";
-    echo "Estamos estudiando $this->module con el profesor $this->teacher<br>";
+    echo "Estamos estudiando $this->module con el profesor $this->teacher<br>";*/
   }
 
   public function login()
   {
     echo "Ahora podría mostrar un formulario de login <br>";
+    include("views/form.php");
   }  
 }
