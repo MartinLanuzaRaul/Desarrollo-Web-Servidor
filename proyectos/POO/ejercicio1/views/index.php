@@ -4,6 +4,6 @@
     </head>
     
     <body>
-        <h1>Indice de <?=  $this->name ?> </h1>
+        <h1>Indice</h1>
     </body>
 </html>

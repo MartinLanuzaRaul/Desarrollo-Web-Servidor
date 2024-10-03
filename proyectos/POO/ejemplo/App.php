@@ -30,6 +30,16 @@ class App
     }
   }
 
+  public function run2(){
+    if (isset($_GET['method'])){
+      $method = $_GET['method'];
+    } else {
+      $method = 'index';
+    }
+    $this->$method();
+  }
+
+
   public function index()
   {
     include("views/index.php");
