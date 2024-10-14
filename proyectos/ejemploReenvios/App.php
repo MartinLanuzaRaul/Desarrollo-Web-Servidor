@@ -26,21 +26,17 @@ class App
 
     public function auth() {
         if(isset($_POST["name"]) && isset($_POST["password"])){
+            if(($_POST['name'] != "" && $_POST['password'] != "")){
+                setcookie("name", $_POST['name'], time()+3600*24);
+                setcookie("password", $_POST['password'], time()+3600*24);
+                header('Location: ?method=home');
+            }else{
+                header('Location: ?method=login');
 
-            $name = $_POST["name"];
-            $password = $_POST["password"];
-            setcookie("name", $name, time() + 3600*24 );
-            setcookie("password", $password, time() + 3600*24 );
+            }
+        }}
 
-            header("Location: ?method=home");
-
-
-        }
-
-
-    }
-
-    public function logaut() {
+    public function logout() {
 
         setcookie("name", "", time() -1);
         setcookie("password", "", time() -1 );
