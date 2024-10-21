@@ -1,5 +1,5 @@
 <?php
-
+require_once "zeroException.php";
 class Ejercicio1APP
 {
 
@@ -53,27 +53,28 @@ class Ejercicio1APP
   public function funcionPrimos()
   {
     for ($i = 0; $i < 10000; $i++) {
-      if($this->esPrimo($i) == true){
+      if ($this->esPrimo($i) == true) {
         echo $i . "<br>";
       }
     }
   }
 
-  private function esPrimo($num){
+  private function esPrimo($num)
+  {
     $esPrimo = true;
     $contador = 0;
-    for($i = 1; $i <= $num ; $i++){
-      if($num %  $i == 0){
+    for ($i = 1; $i <= $num; $i++) {
+      if ($num %  $i == 0) {
         $contador++;
       }
-      if($contador == 2){
+      if ($contador == 2) {
         $esPrimo = true;
-      }else{
+      } else {
         $esPrimo = false;
       }
       return $esPrimo;
     }
-  /*  $esPrimo = true;
+    /*  $esPrimo = true;
     for($i = 2 ; $i < $num-1 ; $i++){
       if($num % $i == 0){
         $esPrimo = false;
@@ -82,6 +83,44 @@ class Ejercicio1APP
       }
     }
     return $esPrimo;*/
+  }
+
+  public function calculadora()
+  {
+    include("views/calculadora.php");
+
+    if (isset($_POST['operando1']) && isset($_POST['operando2']) && isset($_POST['operacion'])) {
+
+
+      if ($_POST['operando1'] != "" && $_POST['operando2'] != "") {
+        //Mostrar resultado, en este caso en la propia página
+        switch ($_POST['operacion']) {
+          case "+":
+            echo $_POST["operando1"] + $_POST["operando2"];
+            break;
+          case "-":
+            echo $_POST['operando1'] - $_POST['operando2'];
+            break;
+          case "x":
+            echo $_POST['operando1'] * $_POST['operando2'];
+            break;
+          case "/":
+              if($_POST['operando2'] == 0){
+                throw new zeroException("División por cero");
+              }
+            
+            echo $_POST['operando1'] / $_POST['operando2'];
+            break;
+          default:
+            echo "Default";
+            break;
+        }
+      } else {
+        echo "Faltan operandos";
+      }
+    }
+
+
     
   }
 }

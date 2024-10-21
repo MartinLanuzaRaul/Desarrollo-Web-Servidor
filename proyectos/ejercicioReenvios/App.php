@@ -37,21 +37,69 @@ class App
         }
     }
 
-    public function new()
-    {
-        if (isset($_POST["deseo"])) {
-            if ($_POST['deseo'] != "") {
+    public function new(){
+        if(isset($_POST['deseo'])){
+            if($_POST['deseo'] != ""){
 
-                $lista = [$_POST['deseo']];
-                setcookie("deseos", serialize($lista), time() + 3600 * 24);
-
-                $lista = unserialize($deseos);
-                foreach ($lista as $elemento) {
-                    echo "<li>$elemento</li>";
+                if(isset($_COOKIE['listaDeseos'])){
+                    $lista = unserialize($_COOKIE['listaDeseos']);
+                }else{
+                    $lista = [];
                 }
+                $lista[] = $_POST['deseo'];
+        
+                setcookie("listaDeseos", serialize($lista), time() +3600 *24);
+
             }
         }
+        header('Location: ?method=home');
+       
     }
+
+    public function delete()
+    {
+      if(isset($_POST["numeroDeseo"])){
+        $numDeseo = (int)$_POST["numeroDeseo"];
+  
+        if($numDeseo > 0){
+          if(isset($_COOKIE["listaDeseos"])){
+            $lista = unserialize($_COOKIE["listaDeseos"]);
+            unset($lista[$numDeseo -1]);
+  
+            $lista = array_values($lista);
+  
+            //--Lo mismo que array_values pero con for--
+            /*foreach($lista as $clave=>$valor){
+              if($numDeseo -1 == $clave){
+              $lista[$numDeseo -1 ] = 0 ;
+              }
+            }
+            foreach($lista as $clave=>$valor){
+              if($numDeseo > $clave){
+                $lista[$numDeseo] = $lista[$numDeseo + 1];
+              }
+            }*/
+          }
+          setcookie("listaDeseos", serialize($lista),time()+ 36000 * 24);
+        }
+  
+      }
+      header('Location: ?method=home');
+
+  
+    }
+
+    public function empty(){
+
+        if(isset($_COOKIE['listaDeseos'])){
+            setcookie("listaDeseos", "", time() -1);
+        }
+        header('Location: ?method=home');
+
+    }
+    
+        
+    
 
     public function logout()
     {
