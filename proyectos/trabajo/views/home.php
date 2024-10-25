@@ -32,6 +32,13 @@
         a{
             text-decoration: none;
         }
+
+        #eliminarProducto{
+            margin-top: 1%;
+            width: 100%;
+        }
+
+       
     </style>
 </head>
 
@@ -71,13 +78,19 @@
                     <td>{$producto['cantidad']}</td>
                     <td>{$producto['precio']}</td>
                     <td>{$producto['mail']}</td>
-                    <td><a href=''><button>Eliminar</button></a></td>
+                    <td><a href='?method=borrarProducto()'><button>Eliminar</button></a></td>
                   </tr>";
         }
     }
    
     ?>
 </table>
+
+<form id="eliminarProducto" action="?method=borrarProducto" method="post">
+        <label for="">Producto a eliminar</label>
+        <input type="text" name="productoAEliminar"> 
+        <input type="submit" value="Eliminar producto">
+    </form>
 
     <a href="?method=empty"> <input type="button" value="Eliminar todo"> </a><br>
 

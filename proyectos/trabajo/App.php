@@ -116,6 +116,27 @@ class App
         header('Location: ?method=home');
     }
 
+    public function borrarProducto()
+    {
+        if (isset($_COOKIE['productos'])) {
+            $productos = unserialize($_COOKIE['productos']);
+            $productoAEliminar = $_POST['productoAEliminar'];
+    
+            $productosActualizados = [];
+    
+            foreach ($productos as $producto) {
+                if ($producto['producto'] !== $productoAEliminar) {
+                    $productosActualizados[] = $producto;
+                }
+            }
+    
+            setcookie("productos", serialize($productosActualizados), time() + 3600 * 24); 
+            
+        }
+    
+        header('Location: ?method=home');
+    }
+
 
 
     public function logout()
