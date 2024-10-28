@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once "negativoException.php";
+    
 class App
 {
     public function run()
@@ -74,37 +76,59 @@ class App
 
 
     public function new()
-    {
+{
+    try {
         if (isset($_POST['producto']) && !empty($_POST['producto'])) {
             $producto = $_POST['producto'];
             $cantidad = $_POST['cantidadProducto'];
             $precio = $_POST['precioProducto'];
 
+            if ($precio < 0) {
+                throw new NegativoException();
+            }
+
             if (isset($_COOKIE["mail"])) {
                 $mail = $_COOKIE["mail"];
             }
 
-            $productos = [];
-
             if (isset($_COOKIE['productos'])) {
                 $productos = unserialize($_COOKIE['productos']);
+            } 
+
+            $productosActualizados = [];
+            $productoExistente = false;
+
+            foreach ($productos as $prod) {
+                if ($prod['producto'] == $producto) {
+                    $prod['cantidad'] += $cantidad; 
+                    $prod['precio'] = $precio;       
+                    $prod['mail'] = $mail;          
+                    $productoExistente = true;
+                }
+                $productosActualizados[] = $prod;
             }
 
-            
+            if ($productoExistente == false) {
+                $nuevoProducto = [
+                    'producto' => $producto,
+                    'cantidad' => $cantidad,
+                    'precio'   => $precio,
+                    'mail'     => $mail
+                ];
+                $productosActualizados[] = $nuevoProducto;
+            }
 
-
-            $productos[] = [
-                'producto' => $producto,
-                'cantidad' => $cantidad,
-                'precio'   => $precio,
-                'mail'     => $mail
-            ];
-
-            setcookie("productos", serialize($productos), time() + 3600 * 24);
+            setcookie("productos", serialize($productosActualizados), time() + 3600 * 24);
+            setcookie("errorNegativo", false, time() - 3600);
         }
 
         header('Location: ?method=registrarProducto');
+    } catch (NegativoException $e) {
+        setcookie("errorNegativo", true, time() + 3600 * 24);
+        setcookie("errorMessage", $e->errorMessage(), time() + 3600 * 24); 
+        header('Location: ?method=registrarProducto');
     }
+}
 
     public function empty()
     {

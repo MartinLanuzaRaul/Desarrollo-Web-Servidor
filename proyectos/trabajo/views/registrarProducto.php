@@ -1,9 +1,12 @@
 <html>
 
 <head>
+
     <title>Registrar producto</title>
     <style>
-           body {
+       
+
+        body {
             font-family: 'Arial', sans-serif;
             background-color: #1d1965;
             margin: 0;
@@ -34,7 +37,7 @@
             color: #555;
         }
 
-        #btnProducto, 
+        #btnProducto,
         #btnCantidadProducto,
         #btnPrecio {
             width: calc(100% - 22px);
@@ -46,7 +49,7 @@
             transition: border-color 0.3s;
         }
 
-       
+
 
         #btnRegistrar {
             background-color: #e3ab3c;
@@ -65,7 +68,7 @@
             background-color: #d69e2a;
         }
 
-        #volver{
+        #volver {
             text-decoration: none;
             display: block;
             text-align: center;
@@ -83,10 +86,22 @@
             transition: background-color 0.3s;
         }
 
-        #btnVolver:hover{
+        #btnVolver:hover {
             background-color: #d69e2a;
         }
-    
+
+        #error {
+            background-color: #f8d7da;
+            color: red;
+            border: solid;
+            border-color: red;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -106,6 +121,13 @@
             <input id="btnRegistrar" type="submit" value="Registrar producto">
         </form>
     </div>
+    <?php
+    if (isset($_COOKIE['errorNegativo']) && $_COOKIE['errorNegativo'] == true) {
+        // negativoException->errorMessage(); no va, hay que guardar el mensaje en una cookie
+        echo "<p id='error'>{$_COOKIE['errorMessage']}</p>";
+        setcookie("errorNegativo", false, time() - 3600);
+    }
+    ?>
 </body>
 
 </html>

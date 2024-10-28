@@ -56,10 +56,12 @@
             color: white;
             text-align: center;
         }
+
     </style>
 </head>
 
 <body>
+
     <a id="volver" href="?method=home">
         <input id="btnVolver" type="button" value="volver"></a>
     <h1>Valor total</h1>

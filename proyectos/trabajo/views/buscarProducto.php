@@ -1,6 +1,9 @@
 <html>
 
 <head>
+    <?php
+    require_once "ProductoNoEncontradoException.php";
+    ?>
     <title>Buscar producto</title>
     <style>
         body {
@@ -40,7 +43,7 @@
             background-color: white;
         }
 
-        #volver{
+        #volver {
             text-decoration: none;
             display: block;
             text-align: center;
@@ -57,7 +60,7 @@
             cursor: pointer;
         }
 
-        #btnVolver:hover{
+        #btnVolver:hover {
             background-color: #d69e2a;
         }
 
@@ -77,8 +80,7 @@
             background-color: #d69e2a;
         }
 
-        #inputProductoABuscar
-            {
+        #inputProductoABuscar {
             width: calc(100% - 22px);
             padding: 10px;
             margin: 10px 0;
@@ -86,7 +88,7 @@
             border-radius: 5px;
             font-size: 16px;
         }
-        
+
         #labelProducto {
             font-weight: bold;
             margin-top: 10px;
@@ -100,47 +102,56 @@
     <a id="volver" href="?method=home">
         <input id="btnVolver" type="button" value="volver"></a>
 
-        <div>
-    <form action="?method=buscarProducto" method="post">
-        <label id="labelProducto" for="">Producto</label>
-        <input id="inputProductoABuscar" type="text" name="productoABuscar"> <br>
-        <input id="btnBuscar" type="submit" value="Buscar">
-    </form>
+    <div>
+        <form action="?method=buscarProducto" method="post">
+            <label id="labelProducto" for="">Producto</label>
+            <input id="inputProductoABuscar" type="text" name="productoABuscar"> <br>
+            <input id="btnBuscar" type="submit" value="Buscar">
+        </form>
     </div>
 
     <table>
 
         <?php
-        if (isset($_COOKIE['productos'])) {
-            $productos = unserialize($_COOKIE['productos']);
+        if (isset($_POST['productoABuscar']) && ($_POST['productoABuscar'] != "")) {
+            try {
+                $productos = unserialize($_COOKIE['productos']);
+                $productoEncontrado = false;
 
-            foreach ($productos as $producto) {
-                if ($producto['producto'] == $_POST['productoABuscar']) {
-                    echo "
-                <tr>
-                    <th>Producto</th>
-                    <th>Stock</th>
-                    <th>Precio unidad</th>
-                    <th>Añadido por</th>
-                </tr>
+                foreach ($productos as $producto) {
+                    if ($producto['producto'] == $_POST['productoABuscar']) {
+                        $productoEncontrado = true;
+                        echo "
+                        <tr>
+                            <th>Producto</th>
+                            <th>Stock</th>
+                            <th>Precio unidad</th>
+                            <th>Añadido por</th>
+                        </tr>
 
-                <tr>
-                    <td>{$producto['producto']}</td>
-                    <td>{$producto['cantidad']}</td>
-                    <td>{$producto['precio']}</td>
-                    <td>{$producto['mail']}</td>
-                  </tr>";
+                        <tr>
+                            <td>{$producto['producto']}</td>
+                            <td>{$producto['cantidad']}</td>
+                            <td>{$producto['precio']}</td>
+                            <td>{$producto['mail']}</td>
+                        </tr>";
+                    }
                 }
-                
-            }
 
-            
+                if ($productoEncontrado == false) {
+                    throw new ProductoNoEncontradoException();
+                }
+            } catch (ProductoNoEncontradoException $e) {
+                echo "<tr>
+        <td>{$e->errorMessage()}</td>
+      </tr>";
+            }
         }
 
         ?>
 
     </table>
-    
+
 </body>
 
 </html>
