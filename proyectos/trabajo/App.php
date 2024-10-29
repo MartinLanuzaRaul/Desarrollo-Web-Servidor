@@ -2,6 +2,7 @@
 session_start();
 
 require_once "negativoException.php";
+require_once "cantidadNegativaException.php";
     
 class App
 {
@@ -87,48 +88,58 @@ class App
                 throw new NegativoException();
             }
 
-            if (isset($_COOKIE["mail"])) {
-                $mail = $_COOKIE["mail"];
+            if ($cantidad <= 0) {
+                throw new cantidadNegativaException();
             }
-
-            if (isset($_COOKIE['productos'])) {
-                $productos = unserialize($_COOKIE['productos']);
-            } 
-
-            $productosActualizados = [];
-            $productoExistente = false;
-
-            foreach ($productos as $prod) {
-                if ($prod['producto'] == $producto) {
-                    $prod['cantidad'] += $cantidad; 
-                    $prod['precio'] = $precio;       
-                    $prod['mail'] = $mail;          
-                    $productoExistente = true;
+    
+                if (isset($_COOKIE["mail"])) {
+                    $mail = $_COOKIE["mail"];
                 }
-                $productosActualizados[] = $prod;
-            }
+    
+                if (isset($_COOKIE['productos'])) {
+                    $productos = unserialize($_COOKIE['productos']);
+                } 
+                $productosActualizados = [];
+                $productoExistente = false;
+    
+                foreach ($productos as $prod) {
+                    if ($prod['producto'] == $producto) {
+                        $prod['cantidad'] += $cantidad; 
+                        $prod['precio'] = $precio;       
+                        $prod['mail'] = $mail;          
+                        $productoExistente = true;
+                    }
+                    $productosActualizados[] = $prod;
+                }
+    
+                if (!$productoExistente) {
+                    $nuevoProducto = [
+                        'producto' => $producto,
+                        'cantidad' => $cantidad,
+                        'precio'   => $precio,
+                        'mail'     => $mail
+                    ];
+                    $productosActualizados[] = $nuevoProducto;
+                }
 
-            if ($productoExistente == false) {
-                $nuevoProducto = [
-                    'producto' => $producto,
-                    'cantidad' => $cantidad,
-                    'precio'   => $precio,
-                    'mail'     => $mail
-                ];
-                $productosActualizados[] = $nuevoProducto;
+                setcookie("productos", serialize($productosActualizados), time() + 3600 * 24); 
+    
+                setcookie("errorNegativo", false, time() - 3600);
+                setcookie("errorCantidadNegativa", false, time() - 3600);
+                setcookie("errorMessage", '', time() - 3600);
+    
+                header('Location: ?method=registrarProducto');
             }
-
-            setcookie("productos", serialize($productosActualizados), time() + 3600 * 24);
-            setcookie("errorNegativo", false, time() - 3600);
+        } catch (NegativoException $e) {
+            setcookie("errorNegativo", true, time() + 3600 * 24);
+            setcookie("errorMessage", $e->errorMessage(), time() + 3600 * 24);
+            header('Location: ?method=registrarProducto');
+        } catch (cantidadNegativaException $e) {
+            setcookie("errorCantidadNegativa", true, time() + 3600 * 24);
+            setcookie("errorMessage", $e->errorMessage(), time() + 3600 * 24);
+            header('Location: ?method=registrarProducto');
         }
-
-        header('Location: ?method=registrarProducto');
-    } catch (NegativoException $e) {
-        setcookie("errorNegativo", true, time() + 3600 * 24);
-        setcookie("errorMessage", $e->errorMessage(), time() + 3600 * 24); 
-        header('Location: ?method=registrarProducto');
     }
-}
 
     public function empty()
     {

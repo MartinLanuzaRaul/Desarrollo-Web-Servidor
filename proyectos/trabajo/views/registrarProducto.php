@@ -122,12 +122,18 @@
         </form>
     </div>
     <?php
-    if (isset($_COOKIE['errorNegativo']) && $_COOKIE['errorNegativo'] == true) {
-        // negativoException->errorMessage(); no va, hay que guardar el mensaje en una cookie
-        echo "<p id='error'>{$_COOKIE['errorMessage']}</p>";
-        setcookie("errorNegativo", false, time() - 3600);
-    }
-    ?>
+if (isset($_COOKIE['errorNegativo']) && $_COOKIE['errorNegativo'] == true) {
+    echo "<p id='error'>{$_COOKIE['errorMessage']}</p>";
+    setcookie("errorNegativo", false, time() - 3600); 
+    setcookie("errorMessage", '', time() - 3600); 
+}
+
+if (isset($_COOKIE['errorCantidadNegativa']) && $_COOKIE['errorCantidadNegativa'] == true) {
+    echo "<p id='error'>{$_COOKIE['errorMessage']}</p>";
+    setcookie("errorCantidadNegativa", false, time() - 3600); 
+    setcookie("errorMessage", '', time() - 3600); 
+}
+?>
 </body>
 
 </html>
