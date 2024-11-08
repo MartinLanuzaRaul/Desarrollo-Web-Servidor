@@ -79,7 +79,7 @@ class App
     public function new()
 {
     try {
-        if (isset($_POST['producto']) && !empty($_POST['producto'])) {
+        if (isset($_POST['producto']) && ($_POST['producto']) != "") {
             $producto = $_POST['producto'];
             $cantidad = $_POST['cantidadProducto'];
             $precio = $_POST['precioProducto'];
