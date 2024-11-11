@@ -166,8 +166,8 @@ class App
   }
 
   /* Consula 4:
-  UPDATE disponibilidad SET cantidad = cantidad + ?
-  */
+  UPDATE disponibilidad SET cantidad = cantidad + ?, fecha_ultima_reposicion = date('now', 'localdate') WHERE codigo_libro = ? AND codigo_tienda = ?
+   */
 
   
 }
