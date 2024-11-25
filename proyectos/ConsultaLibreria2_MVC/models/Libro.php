@@ -45,7 +45,7 @@ class Libro extends Model{
         
             $resultado = $conexion->prepare($sql1);
             $resultado->bindValue(1, $nombreAutor);
-
+            $resultado->execute();
   
             $todosLibros = $resultado->fetchAll(PDO::FETCH_CLASS, Libro::class);
             
