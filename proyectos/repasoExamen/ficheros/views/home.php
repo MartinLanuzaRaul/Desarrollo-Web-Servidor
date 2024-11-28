@@ -8,5 +8,7 @@
   <input type="text" id="producto" name="producto"><br>
   <input type="submit" value="Submit">
 </form> 
+<a href="?method=mostrarProductos">
+<input type="button" value="Mostrar"></a>
 </body>
 </html>
