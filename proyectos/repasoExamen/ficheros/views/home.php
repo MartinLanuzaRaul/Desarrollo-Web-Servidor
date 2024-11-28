@@ -8,7 +8,16 @@
   <input type="text" id="producto" name="producto"><br>
   <input type="submit" value="Submit">
 </form> 
-<a href="?method=mostrarProductos">
-<input type="button" value="Mostrar"></a>
+
+<form action="?method=mostrarProductos" method="post">
+<input type="submit" value="Mostrar">
+
+</form>
+
+
+<?php 
+   echo $content;
+
+?>
 </body>
 </html>

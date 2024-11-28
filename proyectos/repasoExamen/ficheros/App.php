@@ -35,15 +35,14 @@ class App
 
     public function mostrarProductos(){
 
-        $file = fopen("ficheri.txt", "r");
+        $file = fopen("fichero.txt", "r");
 
         if($file){
             $content = fread($file, filesize("fichero.txt"));
-            echo $content;
         }
         fclose($file);
 
-        header('Location: ?method=home');
+        include("views/home.php");    
     }
 
     
