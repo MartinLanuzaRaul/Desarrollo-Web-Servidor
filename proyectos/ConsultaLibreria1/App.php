@@ -1,5 +1,7 @@
 <?php 
 
+namespace Proyecto\Aplicacion;
+
  class App{
 
     public function run()
@@ -23,7 +25,7 @@
     $clave = '';
 
     try{
-        $conexion = new PDO($cadenaConexion, $usuario, $clave);
+        $conexion = new \PDO($cadenaConexion, $usuario, $clave);
 
         $sql1 = "SELECT * FROM `escritor`ORDER BY nombre ASC";
 
@@ -38,7 +40,7 @@
         echo "Conexion establecida con exito";
 
 
-    }catch(PDOException $e){
+    }catch(\PDOException $e){
         echo "Problema de conexion";
     }
     finally{
@@ -52,7 +54,7 @@
         $clave = '';
     
         try{
-            $conexion = new PDO($cadenaConexion, $usuario, $clave);
+            $conexion = new \PDO($cadenaConexion, $usuario, $clave);
 
             if (isset($_POST['codigoLibro']) && !empty($_POST['codigoLibro'])) {    
                 $codigoLibro = ($_POST['codigoLibro']);
@@ -76,7 +78,7 @@
             }
     
     
-        }catch(PDOException $e){
+        }catch(\PDOException $e){
             echo "Problema de conexion";
         }
         finally{
